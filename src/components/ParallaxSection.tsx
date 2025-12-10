@@ -17,7 +17,7 @@ const ParallaxSection = ({ children, offset = 50, className = "" }: ParallaxSect
   const y = useTransform(scrollYProgress, [0, 1], [offset, -offset]);
 
   return (
-    <motion.div ref={ref} style={{ y }} className={className}>
+    <motion.div ref={ref} style={{ y }} className={`will-change-transform ${className}`}>
       {children}
     </motion.div>
   );

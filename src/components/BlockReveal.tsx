@@ -19,8 +19,8 @@ const BlockReveal = ({ onComplete }: BlockRevealProps) => {
           initial={{ y: 0 }}
           animate={{ y: "-100%" }}
           transition={{
-            duration: 0.8,
-            delay: index * 0.1, // Staggered delay
+            duration: 0.5, // Reduced duration for faster animation
+            delay: index * 0.05, // Reduced stagger delay
             ease: [0.76, 0, 0.24, 1], // Custom easing for smooth effect
           }}
           onAnimationComplete={index === columns - 1 ? onComplete : undefined}

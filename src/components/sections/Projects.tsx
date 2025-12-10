@@ -4,11 +4,19 @@ import { ExternalLink, Github, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useScrollDirection, useScrollDynamicAnimation } from "@/hooks/use-scroll-direction";
 
+import appDietToDoor from '../../assets/app diet to door.png';
+import youss from '../../assets/Youss.png';
+import weatherApp from '../../assets/weather app.png';
+import cardValidation from '../../assets/card validation.jpg';
+import analogClock from '../../assets/analog clock.png';
+import quizApp from '../../assets/quiz app.png';
+import dietToDoor from '../../assets/diet to door .png';
+
 const projects = [
   {
     title: "Diet To Door App",
     description: "Diet To Door is a web application designed to help users select meals based on their caloric needs, leveraging the MVC (Model-View-Controller) architectural pattern for efficient and organized development. user: test password: 123456",
-    image: "/src/assets/app diet to door.png",
+    image: appDietToDoor,
     technologies: ["HTML", "CSS", "JavaScript", "Bootstrap", "SASS", "jQuery"],
     liveUrl: "https://app.diettodoor.com/Login",
     githubUrl: "",
@@ -17,7 +25,7 @@ const projects = [
   {
     title: "Fit tracker App (Calories Calculator)",
     description: "My Fit App is a web-based fitness application that lets users track and manage their workouts.It provides an intuitive interface for logging exercises and planning training routines.The app helps users monitor progress and maintain a healthy lifestyle.Built with HTML, CSS, and JavaScript, it demonstrates interactive frontend design for fitness tracking.",
-    image: "/src/assets/Youss.png",
+    image: youss,
     technologies: ["React", "JavaScript", "HTML", "CSS" , "tailwindcss"],
     liveUrl: "https://yossef-ibrahimm.github.io/calories-calculator/",
     githubUrl: "https://github.com/yossef-ibrahimm/calories-calculator",
@@ -25,7 +33,7 @@ const projects = [
   },{
     title: "Weather App",
     description: "Weather app responsive 100% that allows two use lang",
-    image: "/src/assets/weather app.png",
+    image: weatherApp,
     technologies: ["JavaScript", "HTML", "CSS"],
     liveUrl: "https://yossef-ibrahimm.github.io/Weather_App/",
     githubUrl: "https://github.com/yossef-ibrahimm/Weather_App",
@@ -34,17 +42,17 @@ const projects = [
   {
     title: "Interactive Card Validation",
     description: "Website that validates visa information",
-    image: "/src/assets/card validation.jpg",
+    image: cardValidation,
     technologies: ["JavaScript", "HTML", "CSS"],
     liveUrl: "https://yossef-ibrahimm.github.io/visa_card_validation/",
     githubUrl: "https://github.com/yossef-ibrahimm/visa_card_validation",
     featured: false,
   },
-  
+
   {
     title: "Analog Clock & Stopwatch",
     description: "A responsive analog clock is more than just a shape that displays the current time; it adapts seamlessly to different screen sizes while providing an accurate and interactive representation of time.",
-    image: "/src/assets/analog clock.png",
+    image: analogClock,
     technologies: ["JavaScript", "HTML", "CSS"],
     liveUrl: "https://yossef-ibrahimm.github.io/analogclock-stopwatch/",
     githubUrl: "https://github.com/yossef-ibrahimm/analogclock-stopwatch",
@@ -53,7 +61,7 @@ const projects = [
   {
     title: "Quiz App",
     description: "A fully responsive quiz app that dynamically loads questions and answers from a JSON file. It adjusts seamlessly to various screen sizes while providing an interactive and engaging quiz experience.",
-    image: "/src/assets/quiz app.png",
+    image: quizApp,
     technologies: ["JavaScript", "HTML", "CSS"],
     liveUrl: "https://yossef-ibrahimm.github.io/quiz-app/",
     githubUrl: "https://github.com/yossef-ibrahimm/quiz-app",
@@ -62,13 +70,13 @@ const projects = [
   {
     title: "Diet To Door Landing Page",
     description: "Diet to door responsive landing page",
-    image: "/src/assets/diet to door .png",
+    image: dietToDoor,
     technologies: ["HTML", "CSS", "JavaScript", "Bootstrap", "SASS", "jQuery"],
     liveUrl: "https://yossef-ibrahimm.github.io/diet-to-door/",
     githubUrl: "https://github.com/yossef-ibrahimm/diet-to-door",
     featured: true,
   },
-  
+
 ];
 
 const ProjectCard = ({ project, index }: { project: typeof projects[0]; index: number }) => {

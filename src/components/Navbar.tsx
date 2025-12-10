@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
-import logoss from "@/assets/Screenshot 2025-12-10 114228.png";
+import logo from "@/assets//Screenshot 2025-12-10 114228.png";
 const navItems = [
   { name: "Home", href: "#home" },
   { name: "About", href: "#about" },
@@ -69,7 +69,7 @@ const Navbar = () => {
             whileTap={{ scale: 0.95 }}
             aria-label="Youssef Ibrahim - Home"
           >
-            <img src={logoss} alt="Youssef Ibrahim Logo"  className=" object-contain"  style={{height:"60px"  , width:"60px"} }/>
+            <img src={logo} alt="Youssef Ibrahim Logo"  className=" object-contain"  style={{height:"60px"  , width:"60px"} }/>
            {/*  <span className="font-heading text-xl font-bold hidden sm:inline">
               <span className="text-foreground">Yossef</span>
               <span className="gradient-text">.</span>

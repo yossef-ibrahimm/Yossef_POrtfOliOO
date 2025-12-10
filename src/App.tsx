@@ -38,17 +38,17 @@ const App = () => {
             future={{
               v7_startTransition: true,
               v7_relativeSplatPath: true,
-            }}
+            }} basename="/Yossef_POrtfOliOO/"
           >
             {/* Loading Page */}
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               {isLoading && (
                 <LoadingPage onLoadingComplete={handleLoadingComplete} />
               )}
             </AnimatePresence>
 
             {/* Block Reveal Animation */}
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               {showBlockReveal && (
                 <BlockReveal onComplete={handleRevealComplete} />
               )}

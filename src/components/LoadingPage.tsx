@@ -28,8 +28,8 @@ const LoadingPage = ({ onLoadingComplete }: LoadingPageProps) => {
     }));
     setParticles(newParticles);
 
-    // Transition to main content after 2 seconds
-    const timer = setTimeout(onLoadingComplete, 2000);
+    // Transition to main content after 1 second (optimized)
+    const timer = setTimeout(onLoadingComplete, 1000);
     return () => clearTimeout(timer);
   }, [onLoadingComplete]);
 
