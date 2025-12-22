@@ -1,0 +1,17 @@
+.bgggImg{
+   
+    display: flex;
+    background-image: url(/src/assets/hero-bg.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    margin: 0;
+    height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+}
+footer{
+    
+    position: relative;
+    z-index: 999999;
+}
