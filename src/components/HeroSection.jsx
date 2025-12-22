@@ -33,8 +33,6 @@ export const HeroSection = () => {
   const gridOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const tagY = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const headingY = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const paragraphY = useTransform(scrollYProgress, [0, 1], [0, 250]);
-  const paragraphX = useTransform(scrollYProgress, [0, 1], [30, 300]); // Horizontal parallax: right to left
   const buttonsY = useTransform(scrollYProgress, [0, 1], [0, 300]);
   const socialsY = useTransform(scrollYProgress, [0, 1], [0, 350]);
 
@@ -88,9 +86,9 @@ export const HeroSection = () => {
 
         {/* Paragraph */}
         <motion.p
-          style={{ y: paragraphY, x: paragraphX }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+/*         style={{transform:"translateX(0px) !important" }}
+ */        /* initial={{ x: 30 }} */
+         animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
           className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
         >

@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import { RevealOnScroll, DepthLayer } from "./ParallaxSection";
 import { ResponsiveImage } from "./ResponsiveImage";
 import { ArrowRight } from "lucide-react";
+import yossef from "../assets/yossef.png";
+
 export const PremiumAboutSection = ({
   showImage = true,
-  imageUrl = "/yossef.png",
+  
 }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -76,7 +78,7 @@ export const PremiumAboutSection = ({
                 viewport={{ once: false }}
               >
                 <ResponsiveImage
-                  src={imageUrl}
+                  src={yossef}
                   alt="Professional photo"
                   className="w-full h-full"
                   priority={false}
