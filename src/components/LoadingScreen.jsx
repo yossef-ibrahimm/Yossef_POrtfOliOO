@@ -423,8 +423,8 @@ const LoadingContent = ({ name, letterVariants, progress }) => {
 // Blocks Transition Animation
 // ============================================
 const BlocksTransition = () => {
-  const cols = 8;
-  const rows = 6;
+  const cols = 6;
+  const rows = 4;
   const totalBlocks = cols * rows;
 
   return (
