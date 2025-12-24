@@ -119,7 +119,7 @@ export const HeroSection = () => {
           >
             <MagneticButton className="group px-8 py-4 bg-gradient-primary text-primary-foreground font-semibold rounded-full text-base hover:shadow-xl hover:shadow-primary/30 transition-all duration-300">
               <div className="flex items-center gap-2" href="#work">
-                View My Work
+             <a href="#work">View My Work</a>   
                 <motion.span
                   animate={{ x: [0, 4, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
