@@ -9,7 +9,7 @@ import { useRef, useState, useEffect } from "react";
 import { MagneticButton } from "./MagneticButton";
 import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react";
 import { TypewriterText } from "./AnimatedText";
-import cvPdf from "../assets/cv.pdf";
+import cvPdf from "../assets/Youssef_Ibrahim_Frontend_Developer_CV.pdf";
 import "./App.css";
 
 // AnimatedLetters & AnimatedText placeholders
