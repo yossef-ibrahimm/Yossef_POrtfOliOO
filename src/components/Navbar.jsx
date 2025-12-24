@@ -12,7 +12,7 @@ const navLinks = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme("dark");
 
   const { scrollY } = useScroll();
 
