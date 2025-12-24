@@ -67,10 +67,10 @@ const FloatingOrb = ({ className, delay = 0 }) => (
 
 // ============ Contact Info ============
 const contactInfo = [
-  { icon: Mail, label: "Email", value: "yossg.ibrahim@gmail.com", href: "mailto:hello@yossef.dev" },
-  { icon: Phone, label: "Phone", value: "+201028599903", href: "tel:201028599903" },
-   { icon: Phone, label: "Phone", value: "+01030006425", href: "tel:01030006425" },
-  { icon: MapPin, label: "Location", value: "10th of Ramadan Shrqia", href: "#" },
+  {id:1, icon: Mail, label: "Email", value: "yossg.ibrahim@gmail.com", href: "mailto:hello@yossef.dev" },
+  {id:2, icon: Phone, label: "Phone", value: "+201028599903", href: "tel:201028599903" },
+   {id:3, icon: Phone, label: "Phone", value: "+01030006425", href: "tel:01030006425" },
+  {id:4, icon: MapPin, label: "Location", value: "10th of Ramadan Shrqia", href: "#" },
 ];
 
 const socialLinks = [
@@ -201,7 +201,7 @@ export const ContactSection = () => {
                 <div className="space-y-4 pt-4">
                   {contactInfo.map((item, i) => (
                     <motion.a
-                      key={item.label}
+                      key={item.id}
                       href={item.href}
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -410,7 +410,7 @@ const FormField = ({ label, name, type, value, onChange, placeholder, focused, o
       <motion.label
         htmlFor={name}
         className="text-sm font-medium block transition-colors"
-        animate={{ color: focused ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))" }}
+        animate={{ color: focused ? "#1d55ecff" : "#fff" }}
       >
         {label}
       </motion.label>
