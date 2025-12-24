@@ -5,15 +5,24 @@ import PremiumAboutSection from "./components/PremiumAboutSection.jsx";
 import ProjectsSection from "./components/ProjectsSection.jsx";
 import { ContactSection } from "./components/ContactSection.jsx";
 import Footer from "./components/Foter.jsx";
-import { motion, useScroll, useTransform, useMotionValue ,useSpring  } from "framer-motion";
-import { useRef , useState , useEffect } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useState, useEffect, useMemo, memo } from "react";
 import { useTheme } from "./components/ThemeProvider";
-/* import "./App.css";
- */
 
-const InteractiveBackground = ({ theme }) => {
+/* import "./App.css"; */
+
+// --- Constants for Performance ---
+
+// Extracting the heavy SVG string to avoid recreating it on every render
+const NOISE_SVG_URL = "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")";
+
+// Spring configurations defined once to prevent object recreation
+const MOUSE_SPRING_CONFIG = { damping: 25, stiffness: 150 };
+const SECONDARY_SPRING_CONFIG = { damping: 35, stiffness: 100 };
+const TERTIARY_SPRING_CONFIG = { damping: 50, stiffness: 80 };
+
+const InteractiveBackground = memo(({ theme }) => {
   const containerRef = useRef(null);
-  const [particles, setParticles] = useState([]);
   const [ripples, setRipples] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   
@@ -21,16 +30,16 @@ const InteractiveBackground = ({ theme }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
-  const smoothX = useSpring(mouseX, { damping: 25, stiffness: 150 });
-  const smoothY = useSpring(mouseY, { damping: 25, stiffness: 150 });
+  const smoothX = useSpring(mouseX, MOUSE_SPRING_CONFIG);
+  const smoothY = useSpring(mouseY, MOUSE_SPRING_CONFIG);
   
   // Secondary follower (delayed)
-  const smoothX2 = useSpring(mouseX, { damping: 35, stiffness: 100 });
-  const smoothY2 = useSpring(mouseY, { damping: 35, stiffness: 100 });
+  const smoothX2 = useSpring(mouseX, SECONDARY_SPRING_CONFIG);
+  const smoothY2 = useSpring(mouseY, SECONDARY_SPRING_CONFIG);
   
   // Third follower (more delayed)
-  const smoothX3 = useSpring(mouseX, { damping: 50, stiffness: 80 });
-  const smoothY3 = useSpring(mouseY, { damping: 50, stiffness: 80 });
+  const smoothX3 = useSpring(mouseX, TERTIARY_SPRING_CONFIG);
+  const smoothY3 = useSpring(mouseY, TERTIARY_SPRING_CONFIG);
 
   // Detect mobile device
   useEffect(() => {
@@ -43,10 +52,12 @@ const InteractiveBackground = ({ theme }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Generate floating particles (reduced on mobile)
-  useEffect(() => {
+  // --- Memoized Data Generators ---
+  // These only regenerate when 'isMobile' changes, saving heavy calculation cycles during re-renders
+
+  const particles = useMemo(() => {
     const particleCount = isMobile ? 15 : 50;
-    const newParticles = Array.from({ length: particleCount }, (_, i) => ({
+    return Array.from({ length: particleCount }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -54,9 +65,21 @@ const InteractiveBackground = ({ theme }) => {
       duration: Math.random() * 20 + 10,
       delay: Math.random() * 5,
       opacity: isMobile ? Math.random() * 0.3 + 0.1 : Math.random() * 0.5 + 0.1,
+      // Pre-calculating hue to avoid Math.random in render loop
+      hue: 200 + Math.random() * 100 
     }));
-    setParticles(newParticles);
   }, [isMobile]);
+
+  const shapes = useMemo(() => [...Array(isMobile ? 3 : 8)], [isMobile]);
+
+  const orbs = useMemo(() => [
+    { x: '10%', y: '20%', color: '280, 100%, 60%', size: isMobile ? 80 : 150 },
+    { x: '85%', y: '30%', color: '200, 100%, 60%', size: isMobile ? 60 : 120 },
+    { x: '50%', y: '80%', color: '320, 100%, 60%', size: isMobile ? 100 : 180 },
+    ...(!isMobile ? [{ x: '20%', y: '70%', color: '240, 100%, 60%', size: 100 }] : []),
+  ], [isMobile]);
+
+  // --- Event Handlers ---
 
   // Handle mouse move (disabled on mobile)
   useEffect(() => {
@@ -85,11 +108,10 @@ const InteractiveBackground = ({ theme }) => {
     };
     
     setRipples(prev => [...prev, newRipple]);
-    
-    // Remove ripple after animation
-    setTimeout(() => {
-      setRipples(prev => prev.filter(r => r.id !== newRipple.id));
-    }, 1000);
+  };
+
+  const removeRipple = (id) => {
+    setRipples(prev => prev.filter(r => r.id !== id));
   };
 
   return (
@@ -100,7 +122,7 @@ const InteractiveBackground = ({ theme }) => {
         position: 'fixed',
         inset: 0,
         overflow: 'hidden',
-        pointerEvents: 'none',
+        pointerEvents: 'auto', // Changed to 'auto' to allow clicks/ripples
         zIndex: 0,
       }}
     >
@@ -115,7 +137,7 @@ const InteractiveBackground = ({ theme }) => {
         }}
       />
 
-      {/* Animated Mesh Gradient - Slower on mobile */}
+      {/* Animated Mesh Gradient */}
       <motion.div
         style={{
           position: 'absolute',
@@ -148,15 +170,17 @@ const InteractiveBackground = ({ theme }) => {
             height: particle.size,
             borderRadius: '50%',
             background: theme === 'dark'
-              ? `hsla(${200 + Math.random() * 100}, 100%, 70%, ${particle.opacity})`
-              : `hsla(${200 + Math.random() * 100}, 100%, 50%, ${particle.opacity * 0.5})`,
+              ? `hsla(${particle.hue}, 100%, 70%, ${particle.opacity})`
+              : `hsla(${particle.hue}, 100%, 50%, ${particle.opacity * 0.5})`,
             boxShadow: theme === 'dark'
-              ? `0 0 ${particle.size * 2}px hsla(${200 + Math.random() * 100}, 100%, 70%, 0.5)`
-              : `0 0 ${particle.size * 2}px hsla(${200 + Math.random() * 100}, 100%, 50%, 0.3)`,
+              ? `0 0 ${particle.size * 2}px hsla(${particle.hue}, 100%, 70%, 0.5)`
+              : `0 0 ${particle.size * 2}px hsla(${particle.hue}, 100%, 50%, 0.3)`,
+            // Hardware acceleration hint
+            willChange: 'transform, opacity',
           }}
           animate={{
             y: [0, -30, 0],
-            x: [0, Math.random() * 20 - 10, 0],
+            x: [0, (Math.random() - 0.5) * 20, 0],
             opacity: [particle.opacity, particle.opacity * 1.5, particle.opacity],
             scale: [1, 1.2, 1],
           }}
@@ -169,8 +193,8 @@ const InteractiveBackground = ({ theme }) => {
         />
       ))}
 
-      {/* Geometric Shapes - Reduced on mobile */}
-      {[...Array(isMobile ? 3 : 8)].map((_, i) => (
+      {/* Geometric Shapes */}
+      {shapes.map((_, i) => (
         <motion.div
           key={`shape-${i}`}
           style={{
@@ -182,6 +206,7 @@ const InteractiveBackground = ({ theme }) => {
             border: `1px solid hsla(280, 100%, 70%, ${isMobile ? '0.05' : '0.1'})`,
             borderRadius: i % 2 === 0 ? '50%' : '0',
             transform: i % 2 === 0 ? 'none' : 'rotate(45deg)',
+            willChange: 'transform',
           }}
           animate={{
             rotate: i % 2 === 0 ? [0, 360] : [45, 405],
@@ -211,8 +236,8 @@ const InteractiveBackground = ({ theme }) => {
               background: 'radial-gradient(circle, hsla(280, 100%, 70%, 0.8) 0%, transparent 70%)',
               boxShadow: '0 0 60px 30px hsla(280, 100%, 60%, 0.3)',
               pointerEvents: 'none',
-              zIndex: 100,
               transform: 'translate(-50%, -50%)',
+              willChange: 'transform',
             }}
           />
 
@@ -230,6 +255,7 @@ const InteractiveBackground = ({ theme }) => {
               pointerEvents: 'none',
               zIndex: 99,
               transform: 'translate(-50%, -50%)',
+              willChange: 'transform',
             }}
           />
 
@@ -246,6 +272,7 @@ const InteractiveBackground = ({ theme }) => {
               pointerEvents: 'none',
               zIndex: 98,
               transform: 'translate(-50%, -50%)',
+              willChange: 'transform',
             }}
           />
 
@@ -265,6 +292,7 @@ const InteractiveBackground = ({ theme }) => {
               zIndex: 97,
               transform: 'translate(-50%, -50%)',
               filter: 'blur(20px)',
+              willChange: 'transform',
             }}
           />
 
@@ -281,10 +309,12 @@ const InteractiveBackground = ({ theme }) => {
                 borderRadius: '50%',
                 border: '2px solid hsla(280, 100%, 70%, 0.8)',
                 transform: 'translate(-50%, -50%)',
+                pointerEvents: 'none',
               }}
               initial={{ scale: 0, opacity: 1 }}
               animate={{ scale: 15, opacity: 0 }}
               transition={{ duration: 1, ease: 'easeOut' }}
+              onAnimationComplete={() => removeRipple(ripple.id)}
             />
           ))}
         </>
@@ -329,13 +359,8 @@ const InteractiveBackground = ({ theme }) => {
         </svg>
       )}
 
-      {/* Glowing Orbs - Reduced on mobile */}
-      {[
-        { x: '10%', y: '20%', color: '280, 100%, 60%', size: isMobile ? 80 : 150 },
-        { x: '85%', y: '30%', color: '200, 100%, 60%', size: isMobile ? 60 : 120 },
-        { x: '50%', y: '80%', color: '320, 100%, 60%', size: isMobile ? 100 : 180 },
-        ...(!isMobile ? [{ x: '20%', y: '70%', color: '240, 100%, 60%', size: 100 }] : []),
-      ].map((orb, i) => (
+      {/* Glowing Orbs */}
+      {orbs.map((orb, i) => (
         <motion.div
           key={`orb-${i}`}
           style={{
@@ -347,6 +372,7 @@ const InteractiveBackground = ({ theme }) => {
             borderRadius: '50%',
             background: `radial-gradient(circle, hsla(${orb.color}, ${isMobile ? '0.1' : '0.2'}) 0%, transparent 70%)`,
             filter: `blur(${isMobile ? '30px' : '40px'})`,
+            willChange: 'transform, opacity',
           }}
           animate={{
             scale: [1, 1.3, 1],
@@ -386,12 +412,12 @@ const InteractiveBackground = ({ theme }) => {
           position: 'absolute',
           inset: 0,
           opacity: isMobile ? 0.02 : 0.03,
-          background: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          background: NOISE_SVG_URL, // Using constant
         }}
       />
     </div>
   );
-};
+});
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -400,20 +426,19 @@ export default function App() {
   const handleLoadingComplete = () => {
     setIsLoading(false);
   };
+  
   return (
     <>
       {isLoading && <LoadingScreen onLoadingComplete={handleLoadingComplete} />}
       {!isLoading && (
         <>
-          {" "}
-              <InteractiveBackground theme={theme}> </InteractiveBackground>
-
-          <Navbar></Navbar>
-          <HeroSection></HeroSection>
-          <PremiumAboutSection></PremiumAboutSection>
-          <ProjectsSection></ProjectsSection>
-          <ContactSection></ContactSection>
-          <Footer></Footer>
+          <InteractiveBackground theme={theme} />
+          <Navbar />
+          <HeroSection />
+          <PremiumAboutSection />
+          <ProjectsSection />
+          <ContactSection />
+          <Footer />
         </>
       )}
     </>
