@@ -68,7 +68,8 @@ export const Navbar = () => {
             ))}
 
             <MagneticButton className="ml-2 lg:ml-4 px-4 py-2 lg:px-6 lg:py-2.5 bg-gradient-primary text-primary-foreground font-medium rounded-full text-sm hover:shadow-lg hover:shadow-primary/25 transition-shadow duration-300">
-              Let's Talk
+             
+             <a href="#contact"> Let's Talk</a>
             </MagneticButton>
 
             {/* Desktop Theme Toggle */}
