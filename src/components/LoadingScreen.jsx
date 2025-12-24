@@ -1,18 +1,13 @@
+// ============================================
+// LoadingScreen.jsx - كومبوننت التحميل الكامل
+// ============================================
+
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const LoadingScreen = ({ onLoadingComplete }) => {
-  const [loadingStage, setLoadingStage] = useState("loading");
+  const [loadingStage, setLoadingStage] = useState("loading"); // loading, blocks, complete
   const [progress, setProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Detect mobile
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Simulate loading progress
   useEffect(() => {
@@ -46,13 +41,15 @@ const LoadingScreen = ({ onLoadingComplete }) => {
       opacity: 0,
       scale: 0,
       rotateY: -90,
-      z: -100,
+      rotateX: 90,
+      z: -200,
       filter: "blur(10px)",
     },
     visible: (i) => ({
       opacity: 1,
       scale: 1,
       rotateY: 0,
+      rotateX: 0,
       z: 0,
       filter: "blur(0px)",
       transition: {
@@ -64,16 +61,24 @@ const LoadingScreen = ({ onLoadingComplete }) => {
       }
     }),
     hover: {
-      scale: 1.2,
-      rotateY: 180,
+      scale: 1.3,
+      rotateY: 360,
+      z: 50,
+      textShadow: "0 0 30px rgba(139, 92, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.5)",
       transition: {
-        duration: 0.5,
+        duration: 0.6,
         ease: "easeOut"
       }
     },
     code: (i) => ({
-      opacity: [1, 0.5, 1],
-      scale: [1, 0.98, 1],
+      opacity: [1, 0.3, 1],
+      scale: [1, 0.95, 1.05, 1],
+      rotateY: [0, 5, -5, 0],
+      textShadow: [
+        "0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3)",
+        "0 0 20px rgba(139, 92, 246, 0.7), 0 0 40px rgba(236, 72, 153, 0.5)",
+        "0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3)",
+      ],
       transition: {
         delay: i * 0.15,
         duration: 3,
@@ -93,7 +98,8 @@ const LoadingScreen = ({ onLoadingComplete }) => {
           transition={{ duration: 0.5 }}
           className="fixed inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden z-50"
         >
-          <GlowingOrbs isMobile={isMobile} />
+          {/* Background Orbs */}
+          <GlowingOrbs />
 
           <AnimatePresence mode="wait">
             {loadingStage === "loading" && (
@@ -102,12 +108,11 @@ const LoadingScreen = ({ onLoadingComplete }) => {
                 name={name}
                 letterVariants={letterVariants}
                 progress={progress}
-                isMobile={isMobile}
               />
             )}
 
             {loadingStage === "blocks" && (
-              <BlocksTransition key="blocks" isMobile={isMobile} />
+              <BlocksTransition key="blocks" />
             )}
           </AnimatePresence>
         </motion.div>
@@ -119,7 +124,7 @@ const LoadingScreen = ({ onLoadingComplete }) => {
 // ============================================
 // Loading Content
 // ============================================
-const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
+const LoadingContent = ({ name, letterVariants, progress }) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -129,41 +134,39 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
       className="fixed inset-0 flex flex-col items-center justify-center z-50 px-4"
     >
       {/* Name with Advanced Letter Animation */}
-      <div className="mb-12 md:mb-16 relative">
-        {/* Code Particles Background - Reduced on mobile */}
-        {!isMobile && (
-          <div className="absolute inset-0 -z-10">
-            {[...Array(12)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute text-xs text-purple-500/20 font-mono"
-                initial={{
-                  x: Math.random() * 100 - 50,
-                  y: Math.random() * 100 - 50,
-                  opacity: 0,
-                }}
-                animate={{
-                  x: Math.random() * 200 - 100,
-                  y: Math.random() * 200 - 100,
-                  opacity: [0, 0.5, 0],
-                }}
-                transition={{
-                  delay: i * 0.15,
-                  duration: 3,
-                  repeat: Infinity,
-                }}
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-              >
-                {["{}", "[]", "</>", "=>", "//", "&&"][i % 6]}
-              </motion.div>
-            ))}
-          </div>
-        )}
+      <div className="mb-16 relative">
+        {/* Code Particles Background */}
+        <div className="absolute inset-0 -z-10">
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute text-xs text-purple-500/20 font-mono"
+              initial={{
+                x: Math.random() * 100 - 50,
+                y: Math.random() * 100 - 50,
+                opacity: 0,
+              }}
+              animate={{
+                x: Math.random() * 200 - 100,
+                y: Math.random() * 200 - 100,
+                opacity: [0, 0.5, 0],
+              }}
+              transition={{
+                delay: i * 0.1,
+                duration: 3,
+                repeat: Infinity,
+              }}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+            >
+              {["{}", "[]", "</>", "( )", "=>", "//", "/*", "*/", "&&", "||"][i % 10]}
+            </motion.div>
+          ))}
+        </div>
 
-        <div className="flex justify-center items-center gap-1 mb-4 md:mb-6 relative">
+        <div className="flex justify-center items-center gap-1 mb-6 relative">
           {Array.from(name).map((letter, i) => (
             <motion.span
               key={i}
@@ -171,30 +174,29 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
               variants={letterVariants}
               initial="hidden"
               animate={["visible", "code"]}
-              whileHover={!isMobile ? "hover" : undefined}
-              className={`${isMobile ? 'text-5xl' : 'text-6xl md:text-8xl'} font-bold relative ${!isMobile ? 'cursor-pointer' : ''}`}
+              whileHover="hover"
+              className="text-6xl md:text-8xl font-bold relative cursor-pointer"
               style={{
                 fontFamily: '"JetBrains Mono", "Fira Code", monospace',
                 display: "inline-block",
                 transformStyle: "preserve-3d",
+                perspective: "1000px",
               }}
             >
-              {/* Matrix Effect - Only desktop */}
-              {!isMobile && (
-                <motion.span
-                  className="absolute inset-0 opacity-20 text-green-400"
-                  animate={{
-                    opacity: [0.1, 0.3, 0.1],
-                  }}
-                  transition={{
-                    delay: i * 0.2,
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                >
-                  {["0", "1", "{", "}", "<", ">"][i % 6]}
-                </motion.span>
-              )}
+              {/* Matrix/Code Effect Background */}
+              <motion.span
+                className="absolute inset-0 opacity-20 text-green-400"
+                animate={{
+                  opacity: [0.1, 0.3, 0.1],
+                }}
+                transition={{
+                  delay: i * 0.2,
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              >
+                {["0", "1", "{", "}", "<", ">", "/", "\\"][i % 8]}
+              </motion.span>
               
               {/* Main Letter with Gradient */}
               <span className="relative bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
@@ -206,21 +208,37 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
                 {letter}
               </span>
 
-              {/* Hex Code - Only desktop */}
-              {!isMobile && (
-                <motion.span
-                  className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs text-purple-500/40 font-mono"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.6, 0] }}
-                  transition={{
-                    delay: i * 0.1 + 0.5,
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                >
-                  0x{letter.charCodeAt(0).toString(16)}
-                </motion.span>
-              )}
+              {/* Glitch Effect on Hover */}
+              <motion.span
+                className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-blue-600 bg-clip-text text-transparent"
+                style={{
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  clipPath: "polygon(0 0, 100% 0, 100% 45%, 0 45%)",
+                }}
+                initial={{ opacity: 0, x: 0 }}
+                whileHover={{ 
+                  opacity: [0, 1, 0],
+                  x: [-2, 2, -2],
+                  transition: { duration: 0.3, repeat: 2 }
+                }}
+              >
+                {letter}
+              </motion.span>
+
+              {/* Binary/Hex Code Trail */}
+              <motion.span
+                className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-xs text-purple-500/40 font-mono"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 0.6, 0] }}
+                transition={{
+                  delay: i * 0.1 + 0.5,
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              >
+                0x{letter.charCodeAt(0).toString(16)}
+              </motion.span>
             </motion.span>
           ))}
         </div>
@@ -232,16 +250,16 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
           className="text-center relative"
         >
           {/* Terminal-style subtitle */}
-          <div className="flex items-center justify-center gap-2 mb-3 max-w-full overflow-hidden px-4">
+          <div className="flex items-center justify-center gap-2 mb-3" style={{ width: "600px" }}>
             <motion.span
-              className="text-green-400 text-sm font-mono flex-shrink-0"
+              className="text-green-400 text-sm font-mono"
               animate={{ opacity: [1, 0, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             >
               ▶
             </motion.span>
             <motion.p
-              className={`text-slate-400 ${isMobile ? 'text-xs' : 'text-sm md:text-base'} font-mono`}
+              className="text-slate-400 text-sm md:text-base font-mono"
               initial={{ width: 0 }}
               animate={{ width: "auto" }}
               transition={{ delay: 1, duration: 1.5 }}
@@ -256,7 +274,7 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
           </div>
           
           <motion.div
-            className={`${isMobile ? 'w-24' : 'w-32'} h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent mx-auto`}
+            className="w-32 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent mx-auto"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 1.5, duration: 0.8 }}
@@ -264,11 +282,11 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
         </motion.div>
       </div>
 
-      {/* Orbital Loader - Simplified on mobile */}
-      <div className={`relative ${isMobile ? 'w-24 h-24 mb-8' : 'w-32 h-32 mb-12'}`}>
+      {/* Orbital Loader */}
+      <div className="relative w-32 h-32 mb-12">
         {/* Center Dot */}
         <motion.div
-          className={`absolute top-1/2 left-1/2 ${isMobile ? 'w-3 h-3 -mt-1.5 -ml-1.5' : 'w-4 h-4 -mt-2 -ml-2'} bg-gradient-to-r from-blue-500 to-purple-600 rounded-full`}
+          className="absolute top-1/2 left-1/2 w-4 h-4 -mt-2 -ml-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full"
           animate={{
             scale: [1, 1.4, 1],
             boxShadow: [
@@ -284,8 +302,8 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
           }}
         />
 
-        {/* Orbiting Particles - Reduced on mobile */}
-        {[0, 1].map((orbit) => (
+        {/* Orbiting Particles */}
+        {[0, 1, 2].map((orbit) => (
           <motion.div
             key={orbit}
             className="absolute inset-0"
@@ -297,14 +315,21 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
             }}
           >
             <motion.div
-              className={`absolute top-0 left-1/2 ${isMobile ? 'w-2 h-2 -ml-1' : 'w-3 h-3 -ml-1.5'} rounded-full`}
+              className="absolute top-0 left-1/2 w-3 h-3 -ml-1.5 rounded-full"
               style={{
                 background: orbit === 0 
                   ? "linear-gradient(135deg, #3b82f6, #8b5cf6)"
+                  : orbit === 1
+                  ? "linear-gradient(135deg, #8b5cf6, #ec4899)"
                   : "linear-gradient(135deg, #ec4899, #3b82f6)",
               }}
               animate={{
                 scale: [1, 1.5, 1],
+                boxShadow: [
+                  "0 0 15px currentColor",
+                  "0 0 30px currentColor",
+                  "0 0 15px currentColor",
+                ],
               }}
               transition={{
                 duration: 1.5,
@@ -316,8 +341,8 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
           </motion.div>
         ))}
 
-        {/* Orbit Rings - Reduced on mobile */}
-        {[0, 1].map((ring) => (
+        {/* Orbit Rings */}
+        {[0, 1, 2].map((ring) => (
           <motion.div
             key={`ring-${ring}`}
             className="absolute inset-0 border border-slate-700/30 rounded-full"
@@ -329,6 +354,7 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
             }}
             animate={{
               opacity: [0.2, 0.5, 0.2],
+              scale: [1, 1.02, 1],
             }}
             transition={{
               duration: 2,
@@ -342,7 +368,7 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
 
       {/* Progress Bar */}
       <motion.div
-        className={`${isMobile ? 'w-64' : 'w-72'} max-w-full`}
+        className="w-72 max-w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.6 }}
@@ -376,13 +402,13 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
 
       {/* Loading Message */}
       <motion.div
-        className="mt-6 md:mt-8 text-center"
+        className="mt-8 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2 }}
       >
         <motion.p
-          className={`text-slate-500 ${isMobile ? 'text-xs' : 'text-sm'}`}
+          className="text-slate-500 text-sm"
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -394,11 +420,11 @@ const LoadingContent = ({ name, letterVariants, progress, isMobile }) => {
 };
 
 // ============================================
-// Blocks Transition - Optimized
+// Blocks Transition Animation
 // ============================================
-const BlocksTransition = ({ isMobile }) => {
-  const cols = isMobile ? 4 : 6;
-  const rows = isMobile ? 3 : 4;
+const BlocksTransition = () => {
+  const cols = 6;
+  const rows = 4;
   const totalBlocks = cols * rows;
 
   return (
@@ -453,19 +479,17 @@ const BlocksTransition = ({ isMobile }) => {
                 ease: [0.25, 0.46, 0.45, 0.94],
               }}
             >
-              {!isMobile && (
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"
-                  animate={{
-                    opacity: [0.2, 0.5, 0.2],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: distanceFromCenter * 0.1,
-                  }}
-                />
-              )}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"
+                animate={{
+                  opacity: [0.2, 0.5, 0.2],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  delay: distanceFromCenter * 0.1,
+                }}
+              />
             </motion.div>
           );
         })}
@@ -475,46 +499,48 @@ const BlocksTransition = ({ isMobile }) => {
 };
 
 // ============================================
-// Background Glowing Orbs - Optimized
+// Background Glowing Orbs
 // ============================================
-const GlowingOrbs = ({ isMobile }) => (
+const GlowingOrbs = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
     <motion.div
-      className={`absolute top-[-20%] left-[-10%] ${isMobile ? 'w-[400px] h-[400px]' : 'w-[700px] h-[700px]'} bg-blue-500/20 rounded-full ${isMobile ? 'blur-[100px]' : 'blur-[150px]'}`}
+      className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] bg-blue-500/20 rounded-full blur-[150px]"
       animate={{
         scale: [1, 1.2, 1],
         opacity: [0.15, 0.25, 0.15],
+        x: [0, 50, 0],
+        y: [0, 30, 0],
       }}
-      transition={{ duration: isMobile ? 15 : 10, repeat: Infinity, ease: "easeInOut" }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
     />
     <motion.div
-      className={`absolute bottom-[-15%] right-[-10%] ${isMobile ? 'w-[350px] h-[350px]' : 'w-[600px] h-[600px]'} bg-purple-500/15 rounded-full ${isMobile ? 'blur-[80px]' : 'blur-[120px]'}`}
+      className="absolute bottom-[-15%] right-[-10%] w-[600px] h-[600px] bg-purple-500/15 rounded-full blur-[120px]"
       animate={{
         scale: [1, 1.15, 1],
         opacity: [0.12, 0.22, 0.12],
+        x: [0, -40, 0],
+        y: [0, -20, 0],
       }}
       transition={{
-        duration: isMobile ? 18 : 12,
+        duration: 12,
         repeat: Infinity,
         ease: "easeInOut",
         delay: 1,
       }}
     />
-    {!isMobile && (
-      <motion.div
-        className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-pink-500/10 rounded-full blur-[100px]"
-        animate={{
-          scale: [1, 1.3, 1],
-          opacity: [0.08, 0.15, 0.08],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-      />
-    )}
+    <motion.div
+      className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-pink-500/10 rounded-full blur-[100px]"
+      animate={{
+        scale: [1, 1.3, 1],
+        opacity: [0.08, 0.15, 0.08],
+      }}
+      transition={{
+        duration: 8,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: 2,
+      }}
+    />
   </div>
 );
 
