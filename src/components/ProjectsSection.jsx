@@ -1,8 +1,8 @@
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRef, useState, MouseEvent } from "react";
+import { useRef, useState } from "react";
 import { ScrollReveal } from "./ScrollReveal";
 import { AnimatedText } from "./AnimatedText";
-import { ExternalLink, Github, Sparkles } from "lucide-react";
+import { ExternalLink, Github, Sparkles, ArrowUpRight } from "lucide-react";
 
 /* =======================
    PROJECTS DATA
@@ -15,13 +15,6 @@ import weatherApp from "../assets/weather app.png";
 import cardValidation from "../assets/card validation.jpg";
 import analogClock from "../assets/analog clock.png";
 import quizApp from "../assets/quiz app.png";
-import dietToDoor from "../assets/diet to door .png";
-
-/* =======================
-   PROJECTS DATA
-======================= */
-
- 
 
 const projects = [
   {
@@ -89,24 +82,28 @@ const projects = [
     featured: false,
     color: "140, 70%, 45%",
   },
-  ];
+];
 
 /* =======================
-   3D PROJECT CARD
+   3D PROJECT CARD - OPTIMIZED
 ======================= */
 
 const ProjectCard = ({ project, index }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 
   // Mouse position for 3D effect
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  // Smooth spring animation
-  const springConfig = { damping: 25, stiffness: 150 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), springConfig);
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), springConfig);
+  // Smooth spring animation with optimized config
+  const springConfig = { damping: 30, stiffness: 200, mass: 0.5 };
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [5, -5]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-5, 5]), springConfig);
+  
+  // Parallax effect for image
+  const imageX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), springConfig);
+  const imageY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-20, 20]), springConfig);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -124,74 +121,145 @@ const ProjectCard = ({ project, index }) => {
   };
 
   return (
-    <ScrollReveal delay={index * 0.1}>
+    <ScrollReveal delay={index * 0.08}>
       <motion.div
         ref={cardRef}
-        className="perspective-1000 relative"
+        className="perspective-1000 relative h-full"
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={handleMouseLeave}
         style={{
-          rotateX: isHovered ? rotateX : 0,
-          rotateY: isHovered ? rotateY : 0,
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
         }}
       >
         <motion.div
-          className="relative group rounded-2xl overflow-hidden glass-strong card-hover border-gradient preserve-3d"
-          whileHover={{ scale: 1.02 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          className="relative group rounded-3xl overflow-hidden glass-strong card-hover border border-border/50 h-full flex flex-col"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: index * 0.1 }}
         >
-          {/* Glow effect */}
+          {/* Animated Glow Effect */}
           <motion.div
-            className="absolute -inset-1 rounded-2xl opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10"
-            style={{
-              background: `radial-gradient(circle at center, hsl(${project.color}, 0.4), transparent 70%)`,
-            }}
+            className="absolute -inset-[2px] rounded-3xl opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-700 -z-10"
+            animate={isHovered ? {
+              background: [
+                `radial-gradient(circle at 0% 0%, hsl(${project.color}, 0.6), transparent 50%)`,
+                `radial-gradient(circle at 100% 0%, hsl(${project.color}, 0.6), transparent 50%)`,
+                `radial-gradient(circle at 100% 100%, hsl(${project.color}, 0.6), transparent 50%)`,
+                `radial-gradient(circle at 0% 100%, hsl(${project.color}, 0.6), transparent 50%)`,
+                `radial-gradient(circle at 0% 0%, hsl(${project.color}, 0.6), transparent 50%)`,
+              ],
+            } : {}}
+            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
           />
 
-          {/* Image Container */}
-          <div className="relative aspect-video overflow-hidden">
+          {/* Image Container with Parallax */}
+          <div className="relative aspect-[4/3] overflow-hidden">
             <motion.div
-              className="absolute inset-0 bg-cover bg-center"
-              style={{ backgroundImage: `url(${project.image})` }}
-              animate={{ scale: isHovered ? 1.1 : 1 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute inset-0 bg-cover bg-center will-change-transform"
+              style={{ 
+                backgroundImage: `url(${project.image})`,
+                x: imageX,
+                y: imageY,
+              }}
+              animate={{ 
+                scale: isHovered ? 1.15 : 1,
+              }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             />
 
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-
-            {/* Project number */}
-            <motion.div
-              className="absolute top-4 left-4 w-12 h-12 rounded-xl glass flex items-center justify-center"
+            {/* Gradient overlay with animation */}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent"
               animate={{
-                rotate: isHovered ? 360 : 0,
-                scale: isHovered ? 1.1 : 1,
+                opacity: isHovered ? 0.95 : 1,
               }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.4 }}
+            />
+
+            {/* Animated scanline effect */}
+            <motion.div
+              className="absolute inset-0 opacity-0 group-hover:opacity-20"
+              style={{
+                background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.1) 2px, rgba(255,255,255,0.1) 4px)",
+              }}
+              animate={isHovered ? {
+                y: ["-100%", "100%"],
+              } : {}}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+
+            {/* Project Number with Morphing Effect */}
+            <motion.div
+              className="absolute top-4 left-4 w-14 h-14 rounded-2xl glass flex items-center justify-center overflow-hidden"
+              animate={{
+                rotate: isHovered ? [0, 360] : 0,
+                scale: isHovered ? [1, 1.1, 1] : 1,
+                borderRadius: isHovered ? ["1rem", "50%", "1rem"] : "1rem",
+              }}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
             >
-              <span
-                className="text-lg font-bold"
+              <motion.span
+                className="text-xl font-bold relative z-10"
                 style={{ color: `hsl(${project.color})` }}
+                animate={{
+                  scale: isHovered ? [1, 1.2, 1] : 1,
+                }}
+                transition={{ duration: 0.5 }}
               >
                 {String(index + 1).padStart(2, "0")}
-              </span>
+              </motion.span>
+              
+              {/* Animated background circles */}
+              <motion.div
+                className="absolute inset-0 opacity-20"
+                style={{ background: `hsl(${project.color})` }}
+                animate={isHovered ? {
+                  scale: [0, 2],
+                  opacity: [0.3, 0],
+                } : {}}
+                transition={{ duration: 1, repeat: Infinity }}
+              />
             </motion.div>
 
-            {/* Featured badge */}
+            {/* Featured Badge with Pulse */}
             {project.featured && (
               <motion.div
-                className="absolute top-4 right-4 px-3 py-1.5 rounded-full glass flex items-center gap-1.5"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                className="absolute top-4 right-4 px-4 py-2 rounded-full glass flex items-center gap-2 overflow-hidden"
+                initial={{ opacity: 0, x: 20, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 0.3, type: "spring" }}
               >
-                <Sparkles className="w-3 h-3 text-primary" />
-                <span className="text-xs font-medium text-primary">Featured</span>
+                <motion.div
+                  animate={{
+                    rotate: [0, 360],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                >
+                  <Sparkles className="w-4 h-4 text-primary" />
+                </motion.div>
+                <span className="text-xs font-semibold text-primary">Featured</span>
+                
+                {/* Pulse effect */}
+                <motion.div
+                  className="absolute inset-0 bg-primary/20 rounded-full"
+                  animate={{
+                    scale: [1, 1.5],
+                    opacity: [0.5, 0],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
               </motion.div>
             )}
 
-            {/* Action buttons overlay */}
+            {/* Action Buttons with Creative Animations */}
             <motion.div
               className="absolute inset-0 flex items-center justify-center gap-4"
               initial={{ opacity: 0 }}
@@ -203,17 +271,28 @@ const ProjectCard = ({ project, index }) => {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-4 glass rounded-full hover:bg-primary/20 transition-colors"
+                  className="relative p-5 glass rounded-2xl hover:bg-primary/20 transition-colors group/btn overflow-hidden"
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{
                     scale: isHovered ? 1 : 0,
                     rotate: isHovered ? 0 : -180,
                   }}
-                  transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
-                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300, delay: 0.05 }}
+                  whileHover={{ scale: 1.15, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ExternalLink className="w-5 h-5 text-primary" />
+                  <ExternalLink className="w-6 h-6 text-primary relative z-10" />
+                  
+                  {/* Ripple effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-primary/30 rounded-2xl"
+                    initial={{ scale: 0, opacity: 0.5 }}
+                    whileHover={{
+                      scale: [0, 2],
+                      opacity: [0.5, 0],
+                    }}
+                    transition={{ duration: 0.6 }}
+                  />
                 </motion.a>
               )}
               {project.githubUrl && (
@@ -221,71 +300,106 @@ const ProjectCard = ({ project, index }) => {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-4 glass rounded-full hover:bg-accent/20 transition-colors"
+                  className="relative p-5 glass rounded-2xl hover:bg-accent/20 transition-colors overflow-hidden"
                   initial={{ scale: 0, rotate: 180 }}
                   animate={{
                     scale: isHovered ? 1 : 0,
                     rotate: isHovered ? 0 : 180,
                   }}
-                  transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
-                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 300, delay: 0.1 }}
+                  whileHover={{ scale: 1.15, rotate: -5 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Github className="w-5 h-5 text-accent" />
+                  <Github className="w-6 h-6 text-accent relative z-10" />
+                  
+                  {/* Ripple effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-accent/30 rounded-2xl"
+                    initial={{ scale: 0, opacity: 0.5 }}
+                    whileHover={{
+                      scale: [0, 2],
+                      opacity: [0.5, 0],
+                    }}
+                    transition={{ duration: 0.6 }}
+                  />
                 </motion.a>
               )}
             </motion.div>
           </div>
 
           {/* Content */}
-          <div className="p-6 space-y-4">
+          <div className="p-6 space-y-4 flex-1 flex flex-col">
             <motion.h3
-              className="text-xl font-bold font-display transition-colors duration-300"
-              style={{ color: isHovered ? `hsl(${project.color})` : undefined }}
+              className="text-xl font-bold font-display transition-all duration-500"
+              animate={{
+                color: isHovered ? `hsl(${project.color})` : undefined,
+              }}
             >
               {project.title}
             </motion.h3>
 
-            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
+            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 flex-1">
               {project.description}
             </p>
 
-            {/* Technologies */}
+            {/* Technologies with Wave Animation */}
             <div className="flex flex-wrap gap-2 pt-2">
               {project.technologies.slice(0, 4).map((tech, techIndex) => (
                 <motion.span
                   key={tech}
-                  className="px-3 py-1 text-xs font-medium bg-secondary/50 rounded-full border border-border/50"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1 * techIndex }}
+                  className="px-3 py-1.5 text-xs font-medium bg-secondary/50 rounded-full border border-border/50 relative overflow-hidden"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.05 * techIndex }}
                   whileHover={{
-                    scale: 1.05,
-                    backgroundColor: `hsl(${project.color}, 0.15)`,
-                    borderColor: `hsl(${project.color}, 0.3)`,
+                    scale: 1.1,
+                    y: -2,
                   }}
                 >
-                  {tech}
+                  <span className="relative z-10">{tech}</span>
+                  
+                  {/* Hover wave effect */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: `hsl(${project.color}, 0.2)` }}
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileHover={{
+                      scale: 1,
+                      opacity: 1,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </motion.span>
               ))}
               {project.technologies.length > 4 && (
-                <span className="px-3 py-1 text-xs font-medium text-muted-foreground">
+                <motion.span 
+                  className="px-3 py-1.5 text-xs font-medium text-muted-foreground"
+                  whileHover={{ scale: 1.05 }}
+                >
                   +{project.technologies.length - 4}
-                </span>
+                </motion.span>
               )}
             </div>
           </div>
 
-          {/* Bottom accent line */}
+          {/* Animated Bottom Accent Line */}
           <motion.div
-            className="absolute bottom-0 left-0 right-0 h-1"
-            style={{
-              background: `linear-gradient(90deg, hsl(${project.color}), hsl(${project.color}, 0))`,
-            }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          />
+            className="absolute bottom-0 left-0 right-0 h-1 overflow-hidden"
+          >
+            <motion.div
+              className="h-full"
+              style={{
+                background: `linear-gradient(90deg, transparent, hsl(${project.color}), transparent)`,
+              }}
+              initial={{ x: "-100%" }}
+              animate={{ x: isHovered ? "100%" : "-100%" }}
+              transition={{ 
+                duration: 1.5, 
+                repeat: isHovered ? Infinity : 0,
+                ease: "easeInOut" 
+              }}
+            />
+          </motion.div>
         </motion.div>
       </motion.div>
     </ScrollReveal>
@@ -297,22 +411,52 @@ const ProjectCard = ({ project, index }) => {
 ======================= */
 export const ProjectsSection = () => {
   return (
-    <section id="work" className="relative py-32 px-6 overflow-hidden noise-bg">
-      {/* Background effects */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+    <section id="work" className="relative py-24 md:py-32 px-4 md:px-6 overflow-hidden noise-bg">
+      {/* Animated Background Effects */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div 
+          className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+            x: [0, 50, 0],
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 -right-32 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.3, 0.5, 0.3],
+            x: [0, -50, 0],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16 md:mb-20">
           <ScrollReveal>
             <motion.span
-              className="inline-block px-4 py-2 text-sm uppercase tracking-widest text-primary glass rounded-full mb-6"
+              className="inline-block px-5 py-2.5 text-sm uppercase tracking-widest text-primary glass rounded-full mb-6 relative overflow-hidden group"
               whileHover={{ scale: 1.05 }}
             >
-              ✨ Selected Work
+              <span className="relative z-10 flex items-center gap-2">
+                <motion.span
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                >
+                  ✨
+                </motion.span>
+                Selected Work
+              </span>
+              <motion.div
+                className="absolute inset-0 bg-primary/20"
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "100%" }}
+                transition={{ duration: 0.5 }}
+              />
             </motion.span>
           </ScrollReveal>
 
@@ -324,34 +468,45 @@ export const ProjectsSection = () => {
           </h2>
 
           <ScrollReveal delay={0.5}>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl mx-auto">
+            <p className="mt-6 text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
               A collection of projects that showcase my skills in web development
             </p>
           </ScrollReveal>
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Projects Grid - Optimized */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {projects.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}
         </div>
 
-        {/* View All Button */}
-        <ScrollReveal className="flex justify-center mt-16">
+        {/* View All Button with Creative Animation */}
+        <ScrollReveal className="flex justify-center mt-12 md:mt-16">
           <motion.button
-            className="btn-glass group flex items-center gap-3"
+            className="relative px-8 py-4 btn-glass group flex items-center gap-3 overflow-hidden"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <span>View All Projects</span>
+            <span className="relative z-10">View All Projects</span>
             <motion.span
-              className="inline-block"
-              animate={{ x: [0, 5, 0] }}
+              className="relative z-10"
+              animate={{ 
+                x: [0, 5, 0],
+                rotate: [0, 45, 0],
+              }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
-              →
+              <ArrowUpRight className="w-5 h-5" />
             </motion.span>
+            
+            {/* Animated background */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20"
+              initial={{ x: "-100%", skewX: -20 }}
+              whileHover={{ x: "100%" }}
+              transition={{ duration: 0.6 }}
+            />
           </motion.button>
         </ScrollReveal>
       </div>
