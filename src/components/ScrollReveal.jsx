@@ -32,22 +32,7 @@ export const ScrollReveal = memo(
     const ref = useRef(null);
     const { disableMotion } = useMotionSafe();
 
-    // ✅ Mobile / Reduced Motion
-    if (disableMotion) {
-      return (
-        <motion.div
-          className={className}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        >
-          {children}
-        </motion.div>
-      );
-    }
-
-    // 🖥 Desktop
+    // ✅ Hooks دايمًا
     const { scrollYProgress } = useScroll({
       target: ref,
       offset: ["start end", "end start"],
@@ -72,10 +57,25 @@ export const ScrollReveal = memo(
       [0, 1, 1, 0.4]
     );
 
+    // ✅ الشرط هنا فقط
+    if (disableMotion) {
+      return (
+        <motion.div
+          className={className}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4 }}
+        >
+          {children}
+        </motion.div>
+      );
+    }
+
     return (
       <motion.div
         ref={ref}
-        style={{ y, opacity, willChange: "transform, opacity" }}
+        style={{ y, opacity }}
         className={className}
       >
         {children}
