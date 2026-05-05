@@ -35,6 +35,7 @@ import {
   Star,
   Zap,
 } from 'lucide-react'
+import { createSparkles } from '../utils/advancedAnimations'
 
 // ---------------------------------------------------------------------------
 // Project data — module-level constant, never re-created
@@ -159,50 +160,6 @@ const PROJECTS = [
     color: '140, 70%, 45%',
   },
 ]
-
-// ---------------------------------------------------------------------------
-// Sparkle utility — kept local; import from ../utils/advancedAnimations if it
-// exports createSparkles to avoid duplication across the codebase
-// ---------------------------------------------------------------------------
-
-const createSparkles = (element, color = 'rgb(99, 102, 241)') => {
-  if (!element) return
-  const rect = element.getBoundingClientRect()
-  const sparkleCount = 8
-  const cx = rect.left + rect.width / 2
-  const cy = rect.top + rect.height / 2
-
-  for (let i = 0; i < sparkleCount; i++) {
-    const sparkle = document.createElement('div')
-    const angle = (Math.PI * 2 * i) / sparkleCount
-    const distance = 40 + Math.random() * 20
-
-    Object.assign(sparkle.style, {
-      position: 'fixed',
-      width: '4px',
-      height: '4px',
-      background: color,
-      borderRadius: '50%',
-      pointerEvents: 'none',
-      zIndex: '9999',
-      boxShadow: `0 0 10px ${color}`,
-      left: `${cx}px`,
-      top: `${cy}px`,
-    })
-
-    document.body.appendChild(sparkle)
-
-    gsap.to(sparkle, {
-      x: Math.cos(angle) * distance,
-      y: Math.sin(angle) * distance,
-      opacity: 0,
-      scale: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      onComplete: () => sparkle.remove(),
-    })
-  }
-}
 
 // ---------------------------------------------------------------------------
 // ProjectCard

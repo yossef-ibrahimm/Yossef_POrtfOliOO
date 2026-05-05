@@ -46,7 +46,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import yossef from '../assets/yossef.png'
 import { createFloatingParallax } from '../utils/scrollAnimations'
-import { createHoverLift } from '../utils/premiumAnimations'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -418,7 +417,6 @@ export const PremiumAboutSection = ({ showImage = true }) => {
     if (!el) return
 
     createFloatingParallax(el, -0.3)
-    createHoverLift(el, 15)
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
@@ -637,22 +635,23 @@ export const PremiumAboutSection = ({ showImage = true }) => {
           >
             <div className="space-y-6">
               <p className="text-xl md:text-2xl leading-relaxed text-foreground font-light">
-                Front-End Developer with hands-on experience building{' '}
-                <span className="font-semibold text-primary">modern</span>,{' '}
+                I craft{' '}
+                <span className="font-semibold text-primary">exceptional digital experiences</span>{' '}
+                that combine{' '}
                 <span className="font-semibold text-purple-500">
-                  responsive
+                  technical precision
                 </span>
-                , and{' '}
+                {' '}with{' '}
                 <span className="font-semibold text-accent">
-                  high-performance
-                </span>{' '}
-                web applications using React.js, JavaScript (ES6+), and Tailwind
-                CSS.
+                  pixel-perfect design
+                </span>.
               </p>
               <p className="text-lg md:text-xl leading-relaxed text-foreground/70 font-light">
-                Strong in component-based architecture, REST API integration, UX
-                optimization, performance optimization, agile teamwork, and
-                pixel-perfect UI from Figma designs.
+                Specializing in React ecosystem, I architect scalable front-end
+                solutions with focus on{' '}
+                <span className="text-foreground/90">performance</span>,{' '}
+                <span className="text-foreground/90">accessibility</span>, and{' '}
+                <span className="text-foreground/90">clean code</span> that stands the test of time.
               </p>
             </div>
 

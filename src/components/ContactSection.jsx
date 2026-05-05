@@ -139,8 +139,8 @@ const contactInfo = [
     id: 1,
     icon: Mail,
     label: 'Email',
-    value: 'yossef.ibrahim565200@gmail.com',
-    href: 'mailto:hello@yossef.dev',
+    value: 'yossef.ibrahimm.05@gmail.com',
+    href: 'mailto:yossef.ibrahimm.05@gmail.com',
   },
   {
     id: 2,
@@ -326,15 +326,15 @@ export const ContactSection = () => {
             ref={headingRef}
             className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold leading-[1.1] mb-8"
           >
-            <GlitchText text="Wait for what?!" className="text-foreground" />
+            <GlitchText text="Let's Build Something" className="text-foreground" />
             <br />
-            <GlitchText text="Hire  Me" className="text-foreground" />
+            <GlitchText text="Extraordinary" className="text-foreground" />
           </h2>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            I'm always open to discussing new projects, creative ideas, or
-            opportunities to be part of your visions.
+            Have a project in mind? Let's discuss how I can help bring your
+            vision to life with clean code and exceptional UX.
           </p>
         </div>
 

@@ -69,7 +69,7 @@ const SOCIAL_LINKS = [
   },
   {
     icon: Linkedin,
-    href: 'https://www.linkedin.com/in/yossef%D9%80%D9%80%D9%80ibrahim/',
+    href: 'https://www.linkedin.com/in/youssef-ibrahim/',
     label: 'LinkedIn',
   },
 ]
@@ -534,25 +534,27 @@ export const HeroSection = () => {
           </span>
         </div>
 
-        {/* Main heading */}
+        {/* Main heading - Value proposition first */}
         <h1
           ref={headingRef}
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-display font-bold leading-[0.9] md:leading-[0.95] mb-4 opacity-0"
         >
           <span className="relative inline-block">
             <AnimatedLetters
-              text="Hi, I'm"
+              text="Crafting Digital Excellence"
               className="block text-foreground drop-shadow-lg"
             />
           </span>
         </h1>
 
-        {/* Name */}
+        {/* Name + Title */}
         <div ref={subheadingRef} className="mb-8 md:mb-10 opacity-0">
           <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-display font-black bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text text-transparent animate-gradient bg-[length:200%_auto] drop-shadow-2xl">
-            {/* ✅ TypewriterText is not async — Suspense wrapper removed */}
             <TypewriterText text="Youssef Ibrahim" delay={0.5} />
           </span>
+          <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light mt-4">
+             Front-End Developer & UI Engineer
+          </p>
         </div>
 
         {/* Accent line */}
@@ -566,18 +568,18 @@ export const HeroSection = () => {
           </div>
         </div>
 
-        {/* Description */}
+        {/* Description - Confident, value-focused */}
         <p
           ref={paragraphRef}
-          className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 md:mb-14 leading-relaxed opacity-0 px-2 font-light"
+          className="text-lg sm:text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 md:mb-14 leading-relaxed opacity-0 px-2"
         >
-          Front-End Developer with hands-on experience building{' '}
-          <span className="text-primary font-semibold">modern</span>,{' '}
-          <span className="text-accent font-semibold">responsive</span>, and{' '}
-          <span className="text-purple-500 font-semibold">
-            high-performance
-          </span>{' '}
-          web applications.
+          I build{' '}
+          <span className="text-primary font-semibold">blazing-fast</span>,{' '}
+          <span className="text-accent font-semibold">pixel-perfect</span>{' '}
+          web applications that deliver measurable results.
+          <span className="block mt-2 text-lg text-muted-foreground/80">
+            React • TypeScript • Performance Optimization
+          </span>
         </p>
 
         {/* CTA Buttons */}

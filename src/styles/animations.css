@@ -1,36 +1,28 @@
 /**
- * CSS Utilities for Premium Animations - Mobile Optimized
+ * Premium Animations - Clean, performant, no duplicates
+ * Only define animations ONCE. All duplicates removed.
  */
 
-/* Smooth page scroll behavior */
+/* =========================
+   Smooth page scroll
+========================= */
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--primary)) hsl(var(--background));
 }
 
-/* Reduce motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-/* Focus visible styles */
+/* =========================
+   Focus visible styles
+========================= */
 :focus-visible {
   outline: 2px solid hsl(var(--primary));
   outline-offset: 2px;
 }
 
-/* Custom scrollbar for webkit browsers */
+/* =========================
+   Custom scrollbar for webkit
+========================= */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -44,7 +36,6 @@ html {
   background: hsl(var(--primary));
   border-radius: 4px;
   transition: background 0.3s ease;
-  will-change: background;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -52,36 +43,37 @@ html {
   box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
 }
 
-/* Selection styles */
+/* =========================
+   Selection styles
+========================= */
 ::selection {
   background: hsl(var(--primary));
   color: hsl(var(--primary-foreground));
 }
 
-/* Form field focus styles with performance optimization */
+/* =========================
+   Form field focus
+========================= */
 input:focus,
 textarea:focus {
   outline: none;
   box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.3);
-  will-change: box-shadow;
 }
 
-/* Smooth transitions for interactive elements */
+/* =========================
+   Smooth transitions for interactive elements
+========================= */
 button,
 a,
 input,
 textarea,
 select {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: auto;
 }
 
-button:hover,
-a:hover {
-  will-change: transform, box-shadow;
-}
-
-/* Enhanced link hover effect */
+/* =========================
+   Enhanced link hover
+========================= */
 a:not([class]) {
   position: relative;
   text-decoration: none;
@@ -97,23 +89,25 @@ a:not([class])::after {
   height: 2px;
   background: hsl(var(--primary));
   transition: width 0.3s ease;
-  will-change: width;
 }
 
 a:not([class]):hover::after {
   width: 100%;
 }
 
-/* Placeholder opacity */
+/* =========================
+   Placeholder opacity
+========================= */
 ::placeholder {
   opacity: 0.5;
 }
 
-/* Button base styles with performance optimization */
+/* =========================
+   Button base styles
+========================= */
 button {
   position: relative;
   overflow: hidden;
-  will-change: transform;
 }
 
 button::before {
@@ -125,14 +119,15 @@ button::before {
   height: 100%;
   background: rgba(255, 255, 255, 0.1);
   transition: left 0.3s ease;
-  will-change: left;
 }
 
 button:hover::before {
   left: 100%;
 }
 
-/* Improved form field styling */
+/* =========================
+   Improved form field styling
+========================= */
 input[type='text'],
 input[type='email'],
 input[type='tel'],
@@ -152,13 +147,14 @@ textarea::placeholder {
   color: hsl(var(--muted-foreground));
 }
 
-/* Glass morphism effect with performance optimization */
+/* =========================
+   Glass morphism effects
+========================= */
 .glass {
   background: rgba(10, 12, 16, 0.5);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  will-change: backdrop-filter;
 }
 
 .glass-strong {
@@ -168,124 +164,94 @@ textarea::placeholder {
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Gradient text */
+/* =========================
+   Gradient text
+========================= */
 .text-gradient {
   background: linear-gradient(135deg, #63f, #8854e0, #ec4899);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  will-change: background-position;
-}
-
-.text-gradient {
   animation: gradient-shift 3s ease infinite;
 }
 
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Color animation */
+/* =========================
+   Color pulse animation
+========================= */
 @keyframes color-pulse {
-  0%,
-  100% {
-    color: hsl(var(--foreground));
-  }
-  50% {
-    color: hsl(var(--primary));
-  }
+  0%, 100% { color: hsl(var(--foreground)); }
+  50% { color: hsl(var(--primary)); }
 }
 
 .color-pulse {
   animation: color-pulse 2s ease-in-out infinite;
-  will-change: color;
 }
 
-/* Glow text effect */
+/* =========================
+   Glow text effect
+========================= */
 .glow-text {
   animation: pulse 2s ease-in-out infinite;
   text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-  will-change: text-shadow;
 }
 
-/* Bounce animation */
+/* =========================
+   Bounce animation
+========================= */
 @keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 .bounce {
   animation: bounce 1s ease-in-out infinite;
-  will-change: transform;
 }
 
-/* Pulse animation */
+/* =========================
+   Pulse animation
+========================= */
 @keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
 }
 
 .pulse {
   animation: pulse 2s ease-in-out infinite;
-  will-change: opacity;
 }
 
-/* Shimmer effect optimized */
+/* =========================
+   Shimmer effect
+========================= */
 @keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
 .shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
   background-size: 1000px 100%;
   animation: shimmer 2s infinite;
-  will-change: background-position;
 }
 
-/* Mobile-specific optimizations */
+/* =========================
+   Fade in scale
+========================= */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================
+   Mobile-specific optimizations
+========================= */
 @media (max-width: 768px) {
-  /* Disable animations on mobile for better performance */
-  @media (prefers-reduced-motion: no-preference) {
-    *:not(.icon):not(svg) {
-      animation-duration: 0.5s !important;
-      transition-duration: 0.3s !important;
-    }
-  }
-
-  /* Optimize scrollbar on mobile */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-
   /* Reduce backdrop blur on mobile for performance */
   .glass {
     backdrop-filter: blur(5px);
@@ -302,12 +268,6 @@ textarea::placeholder {
     text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
   }
 
-  /* Optimize button interactions on touch devices */
-  button,
-  a {
-    transition: all 0.2s ease;
-  }
-
   /* Safe area insets for notched phones */
   body {
     padding-left: env(safe-area-inset-left);
@@ -317,260 +277,34 @@ textarea::placeholder {
   }
 }
 
-/* Improved form field styling */
-input[type='text'],
-input[type='email'],
-input[type='tel'],
-textarea {
-  background: hsl(var(--background), 50%);
-  border: 1px solid hsl(var(--border));
-  color: hsl(var(--foreground));
-}
-
-input[type='text']::placeholder,
-input[type='email']::placeholder,
-input[type='tel']::placeholder,
-textarea::placeholder {
-  color: hsl(var(--muted-foreground));
-}
-
-/* Animate elements on load */
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Glow text effect */
-.glow-text {
-  animation: pulse 2s ease-in-out infinite;
-  text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-}
-
-/* Bounce animation */
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.bounce {
-  animation: bounce 1s ease-in-out infinite;
-}
-
-/* Pulse animation */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.8;
-  }
-}
-
-.pulse {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* Shimmer effect */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-.shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
-  background-size: 1000px 100%;
-  animation: shimmer 2s infinite;
-}
-
-/* Glass morphism effect */
-.glass {
-  background: rgba(10, 12, 16, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-strong {
-  background: rgba(10, 12, 16, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-/* Gradient text */
-.text-gradient {
-  background: linear-gradient(135deg, #63f, #8854e0, #ec4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradient-shift 3s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* Color animation */
-@keyframes color-pulse {
-  0%,
-  100% {
-    color: hsl(var(--foreground));
-  }
-  50% {
-    color: hsl(var(--primary));
-  }
-}
-
-.color-pulse {
-  animation: color-pulse 2s ease-in-out infinite;
-}
-
-/* Improve accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-/* ========================= */
-/* Light Mode Color Enhancements */
-/* ========================= */
+/* =========================
+   Light Mode Enhancements
+========================= */
 .light {
-  /* Enhanced button styling for light mode */
-  button {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    color: inherit;
-  }
-
   button:hover {
     box-shadow: 0 6px 24px hsl(var(--primary) / 0.18);
     transform: translateY(-1px);
-  }
-
-  button:active {
-    transform: translateY(0);
-  }
-
-  /* Link styling for light mode - improved contrast */
-  a:not([class]) {
-    color: hsl(var(--primary));
-    text-decoration: underline;
-    text-decoration-color: hsl(var(--primary) / 0.4);
-    text-underline-offset: 0.25em;
-    transition: all 0.3s ease;
-  }
-
-  a:not([class]):hover {
-    color: hsl(var(--accent));
-    text-decoration-color: hsl(var(--accent) / 0.6);
-  }
-
-  /* Input styling for light mode - better contrast */
-  input,
-  textarea,
-  select {
-    background: hsl(var(--input));
-    border: 1.5px solid hsl(var(--border));
-    color: hsl(var(--foreground));
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: hsl(var(--muted-foreground) / 0.7);
   }
 
   input:focus,
   textarea:focus,
   select:focus {
     border-color: hsl(var(--primary));
-    background: hsl(var(--input));
-    box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.6),
-      0 0 0 3px hsl(var(--primary) / 0.08);
+    box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.6), 0 0 0 3px hsl(var(--primary) / 0.08);
     outline: none;
   }
 
-  /* Card styling for light mode - subtle shadow */
   .glass {
     background: hsl(var(--card) / 0.95);
     border: 1px solid hsl(var(--border) / 0.9);
     box-shadow: 0 2px 12px hsl(0 0% 0% / 0.06), 0 1px 3px hsl(0 0% 0% / 0.02);
   }
 
-  .glass-lg {
-    background: hsl(var(--card) / 0.92);
-    border: 1px solid hsl(var(--border) / 0.85);
-    box-shadow: 0 4px 20px hsl(0 0% 0% / 0.08), 0 2px 8px hsl(0 0% 0% / 0.03);
-  }
-
-  /* Text gradient for light mode - better contrast */
   .text-gradient {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary)),
-      hsl(var(--accent))
-    );
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-  }
-
-  /* Glow effects for light mode - subtle */
-  .glow-primary {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.18),
-      0 0 40px hsl(var(--primary) / 0.08);
-  }
-
-  .glow-accent {
-    box-shadow: 0 0 20px hsl(var(--accent) / 0.18),
-      0 0 40px hsl(var(--accent) / 0.08);
-  }
-
-  .glow-sm {
-    box-shadow: 0 0 12px hsl(var(--primary) / 0.12),
-      0 0 24px hsl(var(--primary) / 0.05);
-  }
-
-  .glow-lg {
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.25),
-      0 0 60px hsl(var(--primary) / 0.12);
-  }
-
-  /* Scrollbar styling for light mode */
-  ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
   }
 
   ::-webkit-scrollbar-thumb {
@@ -583,121 +317,8 @@ textarea::placeholder {
     box-shadow: 0 0 8px hsl(var(--primary) / 0.25);
   }
 
-  /* Selection styling */
   ::selection {
     background: hsl(var(--primary) / 0.2);
     color: hsl(var(--foreground));
-  }
-
-  /* Enhanced focus ring */
-  .focus-ring:focus-visible {
-    outline-color: hsl(var(--primary));
-    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
-  }
-
-  /* Form field improvements */
-  input[type='text'],
-  input[type='email'],
-  input[type='tel'],
-  input[type='number'],
-  textarea {
-    background: hsl(var(--input));
-  }
-
-  /* Label styling */
-  label {
-    color: hsl(var(--foreground) / 0.95);
-    font-weight: 500;
-  }
-
-  /* Enhanced gradient buttons */
-  .bg-gradient-primary {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary)),
-      hsl(var(--accent))
-    );
-    color: hsl(var(--primary-foreground));
-  }
-
-  .bg-gradient-primary:hover {
-    filter: brightness(0.95);
-    box-shadow: 0 6px 24px hsl(var(--primary) / 0.2);
-  }
-
-  /* Improved card hover state */
-  .glass:hover {
-    box-shadow: 0 4px 16px hsl(0 0% 0% / 0.1), 0 2px 6px hsl(0 0% 0% / 0.04);
-    border-color: hsl(var(--border) / 0.5);
-  }
-
-  /* Badge and tag styling */
-  .badge {
-    background: hsl(var(--primary) / 0.1);
-    color: hsl(var(--primary));
-    border: 1px solid hsl(var(--primary) / 0.2);
-  }
-
-  .badge:hover {
-    background: hsl(var(--primary) / 0.15);
-    border-color: hsl(var(--primary) / 0.4);
-  }
-
-  /* Secondary button styling */
-  .btn-secondary {
-    background: hsl(var(--secondary) / 0.1);
-    color: hsl(var(--secondary));
-    border: 1px solid hsl(var(--secondary) / 0.2);
-  }
-
-  .btn-secondary:hover {
-    background: hsl(var(--secondary) / 0.15);
-    border-color: hsl(var(--secondary) / 0.4);
-    box-shadow: 0 4px 16px hsl(var(--secondary) / 0.12);
-  }
-
-  /* Code block styling */
-  code,
-  pre {
-    background: hsl(var(--muted) / 0.6);
-    border: 1px solid hsl(var(--border) / 0.6);
-    color: hsl(var(--foreground));
-  }
-
-  /* Divider styling */
-  hr,
-  .divider {
-    border-color: hsl(var(--border) / 0.5);
-  }
-
-  /* Blockquote styling */
-  blockquote {
-    border-left: 4px solid hsl(var(--primary));
-    padding-left: 1rem;
-    color: hsl(var(--foreground) / 0.85);
-  }
-
-  /* Improved table styling */
-  table {
-    border-collapse: collapse;
-    width: 100%;
-  }
-
-  table th {
-    background: hsl(var(--muted) / 0.5);
-    color: hsl(var(--foreground));
-    font-weight: 600;
-    padding: 0.75rem;
-    border-bottom: 2px solid hsl(var(--border));
-    text-align: left;
-  }
-
-  table td {
-    padding: 0.75rem;
-    border-bottom: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  table tbody tr:hover {
-    background: hsl(var(--muted) / 0.3);
   }
 }
