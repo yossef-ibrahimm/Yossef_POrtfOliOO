@@ -1,0 +1,428 @@
+/**
+ * Premium Animations - Clean, performant, no duplicates
+ * Only define animations ONCE. All duplicates removed.
+ */
+
+/* =========================
+   Smooth page scroll
+========================= */
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary)) hsl(var(--background));
+}
+
+/* =========================
+   Focus visible styles
+========================= */
+:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* =========================
+   Custom scrollbar for webkit
+========================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+}
+
+/* =========================
+   Selection styles
+========================= */
+::selection {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* =========================
+   Form field focus
+========================= */
+input:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px hsl(var(--primary) / 0.3);
+}
+
+/* =========================
+   Smooth transitions for interactive elements
+========================= */
+button,
+a,
+input,
+textarea,
+select {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================
+   Enhanced link hover
+========================= */
+a:not([class]) {
+  position: relative;
+  text-decoration: none;
+  color: hsl(var(--primary));
+}
+
+a:not([class])::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: hsl(var(--primary));
+  transition: width 0.3s ease;
+}
+
+a:not([class]):hover::after {
+  width: 100%;
+}
+
+/* =========================
+   Placeholder opacity
+========================= */
+::placeholder {
+  opacity: 0.5;
+}
+
+/* =========================
+   Button base styles
+========================= */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: left 0.3s ease;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+/* =========================
+   Improved form field styling
+========================= */
+input[type='text'],
+input[type='email'],
+input[type='tel'],
+input[type='number'],
+textarea {
+  background: hsl(var(--background) / 0.5);
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  transition: all 0.3s ease;
+}
+
+input[type='text']::placeholder,
+input[type='email']::placeholder,
+input[type='tel']::placeholder,
+input[type='number']::placeholder,
+textarea::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+
+/* =========================
+   Glass morphism effects
+========================= */
+.glass {
+  background: rgba(10, 12, 16, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background: rgba(10, 12, 16, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* =========================
+   Gradient text
+========================= */
+.text-gradient {
+  background: linear-gradient(135deg, #63f, #8854e0, #ec4899);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* =========================
+   Color pulse animation
+========================= */
+@keyframes color-pulse {
+  0%, 100% { color: hsl(var(--foreground)); }
+  50% { color: hsl(var(--primary)); }
+}
+
+.color-pulse {
+  animation: color-pulse 2s ease-in-out infinite;
+}
+
+/* =========================
+   Gradient shift (AnimatedText)
+========================= */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* =========================
+   Glitch keyframes (AnimatedText)
+========================= */
+@keyframes glitch-1 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-3px, 3px); }
+  40% { transform: translate(-3px, -3px); }
+  60% { transform: translate(3px, 3px); }
+  80% { transform: translate(3px, -3px); }
+}
+
+@keyframes glitch-2 {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(3px, -3px); }
+  40% { transform: translate(3px, 3px); }
+  60% { transform: translate(-3px, -3px); }
+  80% { transform: translate(-3px, 3px); }
+}
+
+/* =========================
+   Scroll reveal keyframes (ScrollReveal)
+========================= */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0.6; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0.7; }
+  to { opacity: 1; }
+}
+
+/* =========================
+   Project card styles (ProjectsSection)
+========================= */
+.project-card-title {
+  color: hsl(var(--foreground));
+}
+.project-card-title.is-hovered {
+  color: var(--project-color);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--project-color) 50%, transparent);
+}
+
+.project-number-badge.is-hovered {
+  border-radius: 50%;
+  box-shadow: 0 0 30px var(--project-color, hsl(var(--primary) / 0.6));
+}
+
+.project-tech-tag {
+  background-color: hsl(var(--muted) / 0.5);
+  border-color: hsl(var(--border) / 0.5);
+  color: hsl(var(--muted-foreground));
+  animation: fadeInUp 0.4s ease-out var(--stagger-delay, 0ms) both;
+}
+
+/* =========================
+   Layout containment for performance
+========================= */
+section,
+footer,
+nav {
+  contain: layout style;
+}
+
+.project-card,
+.skill-badge,
+.social-link {
+  contain: layout style paint;
+}
+
+.interactive-bg {
+  contain: strict;
+  pointer-events: none;
+}
+
+/* =========================
+   GPU-accelerated transitions
+========================= */
+.gpu-accelerated {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* =========================
+   Navbar light mode backdrop (Navbar)
+========================= */
+.light nav {
+  backdrop-filter: blur(20px) !important;
+  background-color: rgb(132 132 132 / 82%) !important;
+}
+
+/* =========================
+   Glow text effect
+========================= */
+.glow-text {
+  animation: pulse 2s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+}
+
+/* =========================
+   Bounce animation
+========================= */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* =========================
+   Pulse animation
+========================= */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* =========================
+   Shimmer effect
+========================= */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* =========================
+   Fade in scale
+========================= */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================
+   Mobile-specific optimizations
+========================= */
+@media (max-width: 768px) {
+  /* Reduce backdrop blur on mobile for performance */
+  .glass {
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+
+  .glass-strong {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Reduce text shadows on mobile */
+  .glow-text {
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+  }
+
+  /* Safe area insets for notched phones */
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* =========================
+   Light Mode Enhancements
+========================= */
+.light {
+  button:hover {
+    box-shadow: 0 6px 24px hsl(var(--primary) / 0.18);
+    transform: translateY(-1px);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.6), 0 0 0 3px hsl(var(--primary) / 0.08);
+    outline: none;
+  }
+
+  .glass {
+    background: hsl(var(--card) / 0.95);
+    border: 1px solid hsl(var(--border) / 0.9);
+    box-shadow: 0 2px 12px hsl(0 0% 0% / 0.06), 0 1px 3px hsl(0 0% 0% / 0.02);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.4);
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.7);
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.25);
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--foreground));
+  }
+}

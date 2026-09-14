@@ -1,0 +1,64 @@
+/* LoadingScreen Styles — Simplified */
+
+@keyframes ls-blink   { 0%,100%{opacity:1} 50%{opacity:0} }
+@keyframes ls-float   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes ls-glow    { 0%,100%{opacity:.4} 50%{opacity:1} }
+@keyframes ls-orb-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+.ls-root { font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif; }
+.ls-blink   { animation: ls-blink 1s steps(1) infinite; }
+.ls-float   { animation: ls-float 4s ease-in-out infinite; }
+.ls-glow    { animation: ls-glow 2.4s ease-in-out infinite; }
+
+.ls-letter {
+  display: inline-block;
+  background: linear-gradient(180deg, #ffffff 0%, #c4b5fd 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 40px rgba(139, 92, 246, 0.35);
+}
+
+/* Background orbs — CSS only, no canvas */
+.ls-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  pointer-events: none;
+  animation: ls-orb-drift 12s ease-in-out infinite;
+}
+.ls-bg-orb--1 {
+  width: 300px; height: 300px;
+  top: 10%; left: 10%;
+  background: radial-gradient(circle, rgba(139,92,246,.7), transparent 70%);
+}
+.ls-bg-orb--2 {
+  width: 250px; height: 250px;
+  bottom: 15%; right: 15%;
+  background: radial-gradient(circle, rgba(59,130,246,.5), transparent 70%);
+  animation-delay: -4s;
+}
+
+.ls-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.8) 100%);
+}
+
+.ls-skip-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(203, 213, 225, 0.5);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 20;
+  pointer-events: none;
+  animation: ls-glow 2.4s ease-in-out infinite;
+}

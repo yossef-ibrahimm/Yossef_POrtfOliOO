@@ -1,0 +1,262 @@
+@import 'tailwindcss';
+@import './styles/responsive-utilities.css';
+
+/* =========================
+   Root Design Tokens
+========================= */
+:root {
+  --background: 222 47% 6%;
+  --foreground: 210 40% 98%;
+
+  --card: 222 47% 8%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222 47% 8%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 180 100% 50%;
+  --primary-foreground: 222 47% 6%;
+
+  --secondary: 270 60% 60%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 222 30% 15%;
+  --muted-foreground: 215 20% 55%;
+
+  --accent: 320 80% 55%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 222 30% 18%;
+  --input: 222 30% 15%;
+  --ring: 180 100% 50%;
+
+  --radius: 0.75rem;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(180 100% 50%) 0%, hsl(270 60% 60%) 50%, hsl(320 80% 55%) 100%);
+  --gradient-glow: linear-gradient(135deg, hsl(180 100% 50% / 0.3) 0%, hsl(270 60% 60% / 0.3) 100%);
+  --gradient-dark: linear-gradient(180deg, hsl(222 47% 6%) 0%, hsl(222 47% 4%) 100%);
+
+  /* Glow effects */
+  --glow-primary: 0 0 40px hsl(180 100% 50% / 0.4);
+  --glow-secondary: 0 0 40px hsl(270 60% 60% / 0.4);
+  --glow-accent: 0 0 40px hsl(320 80% 55% / 0.4);
+
+  /* Shadows */
+  --shadow-glow: 0 0 60px hsl(180 100% 50% / 0.15);
+  --shadow-lg: 0 20px 25px -5px hsl(0 0% 0% / 0.3), 0 10px 10px -5px hsl(0 0% 0% / 0.2);
+}
+
+/* =========================
+   Animations - Single source of truth
+   (canonical definitions in src/styles/animations.css)
+========================= */
+@keyframes border-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px hsl(180 100% 50% / 0.3); }
+  50% { box-shadow: 0 0 40px hsl(180 100% 50% / 0.6), 0 0 80px hsl(180 100% 50% / 0.3); }
+}
+
+@keyframes slideInUp {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   Base Styles
+========================= */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    line-height: 1.8;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.3);
+    color: hsl(var(--foreground));
+  }
+}
+
+/* =========================
+   Utility Classes
+========================= */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.25), 0 0 80px hsl(var(--primary) / 0.15);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 40px hsl(var(--accent) / 0.25), 0 0 80px hsl(var(--accent) / 0.15);
+  }
+
+  .glass {
+    background-color: hsl(var(--card) / 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--border) / 0.5);
+    border-radius: var(--radius);
+  }
+
+  .glass-lg {
+    background-color: hsl(var(--card) / 0.5);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid hsl(var(--border) / 0.4);
+    border-radius: var(--radius);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* =========================
+   Light Mode Overrides
+========================= */
+.light {
+  --background: 210 35% 97%;
+  --foreground: 220 20% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 220 20% 15%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 20% 15%;
+
+  --primary: 165 75% 40%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 80% 45%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 210 15% 92%;
+  --muted-foreground: 215 12% 48%;
+
+  --accent: 270 80% 48%;
+  --accent-foreground: 0 0% 100%;
+
+  --border: 210 30% 86%;
+  --input: 210 25% 93%;
+  --ring: 165 75% 40%;
+
+  --shadow-light-glow: 0 4px 20px hsl(165 75% 40% / 0.15);
+}
+
+/* =========================
+   Performance: Reduce motion
+========================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================
+   Custom Scrollbar
+========================= */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.8);
+}
+
+/* =========================
+   Focus Visible
+========================= */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
