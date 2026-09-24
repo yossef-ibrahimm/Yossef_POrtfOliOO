@@ -489,8 +489,8 @@ export const HeroSection = () => {
   // ✅ FIXED: useCallback (not useMemo) for event handler
   const handleDownloadCV = useCallback(() => {
     const link = document.createElement('a')
-    link.href = './cv.pdf'
-    link.download = 'cv.pdf'
+    link.href = './Youssef_Ibrahim_Front_End_Developer_CV.pdf'
+    link.download = 'Youssef_Ibrahim_Front_End_Developer_CV.pdf'
     link.click()
   }, [])
 
